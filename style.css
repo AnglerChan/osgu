@@ -10,6 +10,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Space Mono', monospace;
 }
 
 .container {
@@ -153,4 +154,83 @@ html, body {
 
 .submit-button:hover {
     background-color: rgba(255, 255, 255, 0.3);
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 50px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.modal-content {
+    background-color: #cecece38;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+    width: 60%;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.2s ease;
+}
+
+.modal.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal.show .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.close {
+    position:absolute;
+    right:20px;
+    top:20px;
+    color: #aaa;
+    float: right;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: transform 0.2s cubic-bezier(0.95, 0.05, 0.795, 0.035), opacity 0.2s ease; 
+}
+
+.close:hover,
+.close:focus {
+    color: rgb(39, 39, 39);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#confirm-button {
+    background-color: #dcdcdc2d;
+    font-family:  'Space Mono', monospace;
+    backdrop-filter: blur(2px);
+    color: white;
+    margin-top: 20px;
+    margin-left: 150px;
+    padding: 5px 20px;
+    border: 1px solid #f4f4f49f;
+    filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s;
+}
+
+#confirm-button:hover {
+    background-color: #85858578;
 }

@@ -29,19 +29,24 @@
             </div>
             <div class="input-wrapper">
                 <div class="icon-base">
-                <img src="pic/lock_icon.svg" alt="Password Icon" class="icon" style="width: 20px; height: 20px;" ></div>
-                <input type="password" placeholder="Password" class="input-box">
+                <img src="pic/edit.svg" alt="Password Icon" class="icon" style="width: 15px; height: 20px;" ></div>
+                <input type="text" id="nickname" placeholder="Nickname" class="input-box">
             </div>
             <button class="submit-button" onclick="saveID()">Login</button>
         </div>
     </div>
     <div class="rectangle-right">
-        <p class="text">测试版本不代表最终品质！</p>
-        <p id="greeting"></p>
+
         <img src="pic/code.png" width="100" alt="Logo" style="filter: drop-shadow(2px 2px 4px rgba(10, 10, 10, 0.2)); border-radius: 5px; margin-top: 150px;">
         <p class="text" style="margin-top: 30px; font-size: 10px; margin-left: 50px; opacity: 60%; mix-blend-mode: overlay;">Otomad Society of Gangnam University @2024</p>
     </div>
-</div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p style="font-size: 15px; color: rgb(244, 244, 244);"></p>
+            <button id="confirm-button" onclick="goToNextPage()">OK</button>
+        </div>
+    </div>
 
 
 </body>
