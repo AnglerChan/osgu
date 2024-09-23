@@ -35,11 +35,21 @@
             cursor: pointer;
             transition: transform 0.3s;
         }
+
+        .title-hover {
+            height: 50px;
+            position: absolute;
+            top: -30px;
+            left: 0;
+            right: 0;
+            cursor: pointer;
+            z-index: 1;
+        }
         .menu {
             display: none;
             position: absolute;
-            left: 0;
-            top: 30px;
+            left: -10px;
+            top: 0px;
             background-color: #cccccc00;
             border: 1px solid #99999900;
             z-index: 1;
@@ -49,10 +59,10 @@
             opacity: 0;
             color: gray;
             font-size: 12px;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ;
         }
         .title.active {
-            transform: translateY(-5px);
+            transform: translateY(-5px) ;
         }
         .greeting {
             font-size: 12px;
@@ -61,27 +71,41 @@
             padding: 10px;
             margin-top: auto;
         }
+        .output {
+            font-size: 16px;
+            color: black;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="../pic/logo2.svg" alt="Logo">
         <div class="title">
+            <div class="title-hover"></div>
             Otomad Society of Gangnam University.
             <div class="menu">
-                <div class="menu-item">·Event</div>
+                <div class="menu-item"></div>
+                <div class="menu-item"></div>
+                <div class="menu-item"></div>
+                <div class="menu-item" id="event-item">·Event</div>
                 <div class="menu-item">·Membership</div>
                 <div class="menu-item">·About Us</div>
             </div>
         </div>
     </div>
+    <div class="output" id="output"></div>
     <div class="greeting" id="greeting"></div>
     <script>
         const menuItems = document.querySelectorAll('.menu-item');
         const title = document.querySelector('.title');
         const menu = title.querySelector('.menu');
+        const output = document.getElementById('output');
+
+        let timeout;
 
         title.addEventListener('mouseenter', () => {
+            clearTimeout(timeout);
             menu.style.display = 'block';
             title.classList.add('active');
             menuItems.forEach((item, index) => {
@@ -92,25 +116,30 @@
         });
 
         title.addEventListener('mouseleave', () => {
-            setTimeout(() => {
+            timeout = setTimeout(() => {
                 if (!menu.matches(':hover')) {
-                    menuItems.forEach(item => {
-                        item.style.opacity = '0';
-                    });
-                    title.classList.remove('active');
-                    setTimeout(() => {
-                        menu.style.display = 'none';
-                    }, 300);
+                    hideMenu();
                 }
             }, 300);
         });
 
         menu.addEventListener('mouseenter', () => {
+            clearTimeout(timeout);
             menu.style.display = 'block';
             title.classList.add('active');
         });
 
         menu.addEventListener('mouseleave', () => {
+            timeout = setTimeout(() => {
+                hideMenu();
+            }, 300);
+        });
+
+        document.getElementById('event-item').addEventListener('click', () => {
+            output.textContent = 'Nothing';
+        });
+
+        function hideMenu() {
             menuItems.forEach(item => {
                 item.style.opacity = '0';
             });
@@ -118,7 +147,7 @@
             setTimeout(() => {
                 menu.style.display = 'none';
             }, 300);
-        });
+        }
 
         window.onload = function() {
             const userid = localStorage.getItem('userid');
