@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh">
-<script src="script.js"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O.S.G.U.</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login</title>
 </head>
 <body>
     <style>
@@ -13,10 +11,344 @@
             background-image: url('pic/bg.jpg');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat; 
+            background-repeat: no-repeat;
+
+            * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+}
+
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 700px;
+        height: 400px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        background: transparent; /* 确保背景透明 */
+    }
+
+    .rectangle-left {
+        width: 70%;
+        height: 100%;
+        background-color: rgba(21, 21, 21, 0.7);
+        border-radius: 30px 0 0 30px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 10px rgba(10, 10, 10, 0.5);
+        border: 0.1px solid rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 50px;
+        padding-left: 40px;
+    }
+
+    .rectangle-right {
+        width: 30%;
+        height: 100%;
+        background-color: rgba(63, 63, 63, 0.4);
+        border-radius: 0 30px 30px 0;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 4px 5px rgba(10, 10, 10, 0.5);
+        border: 0.1px solid rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .line {
+        width: 300px;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.6);
+        mix-blend-mode: overlay;
+        margin-top: 5px;
+        margin-right: 50px;
+    }
+
+    .text {
+        font-family: 'Space Mono', monospace;
+        color: white;
+        text-align: center;
+        margin-top: 20px;
+        margin-right: 50px;
+        filter: drop-shadow(2px 2px 1px rgba(10, 10, 10, 0.1));
+    }
+
+    .input-container {
+        display: flex;
+        flex-direction: column;
+        margin-top: 30px;
+        margin-right: 50px;
+    }
+
+    .input-wrapper {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .icon {
+        width: 35px;
+        height: 25px;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.1));
+    }
+
+    .icon-base {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+    }
+
+    .input-box {
+        width: 200px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid rgba(240, 240, 240, 0.5);
+        padding: 010px;
+        margin-bottom: 20px;
+        background-color: rgba(61, 61, 61, 0.6);
+        mix-blend-mode: overlay;
+        color: white;
+        font-family: 'Space Mono', monospace;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.1));
+    }
+    .input-box:last-child {
+        margin-bottom: 0;
+    }
+    .input-box:focus {
+        border-color: rgba(195, 195, 195, 0.5);
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+    }
+
+    .input-box::placeholder {
+        color: rgba(202, 202, 202, 0.5);
+    }
+
+    .input-box2 {
+        width: 200px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid rgba(240, 240, 240, 0.766);
+        padding: 010px;
+        margin-bottom: 20px;
+        background-color: rgba(66, 66, 66, 0.201);
+        mix-blend-mode: overlay;
+        color: white;
+        font-family: 'Space Mono', monospace;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.1));
+    }
+    .input-box2:last-child {
+        margin-bottom: 0;
+    }
+    .input-box2:focus {
+        border-color: rgba(195, 195, 195, 0.5);
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+    }
+
+    .input-box2::placeholder {
+        color: rgba(202, 202, 202, 0.5);
+    }
+
+    .submit-button {
+        margin-top: 10px;
+        width: 120px;
+        height: 30px;
+        border-radius: 8px;
+        border: none;
+        align-self: center;
+        background-color: rgba(170, 170, 170, 0.2);
+        color: white;
+        font-family: 'Space Mono', monospace;
+        cursor: pointer;
+        letter-spacing: 5px;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        border: 0.1px solid rgba(255, 255, 255, 0.2);
+    }
+    .submit-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 50px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0);
+        visibility: hidden;
+        opacity: 0;
+        z-index: 2;
+    }
+    .modal-content {
+        background-color: #cecece38;
+        border-radius: 20px;
+        backdrop-filter: blur(5px);
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        width: 60%;
+        transform: scale(0.8);
+        opacity: 0;
+        transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.2s ease;
+    }
+    .modal.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .modal.show .modal-content {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .modal2 {
+        position: fixed;
+        left: 0;
+        top: -90px;
+        width: 100%;
+        height: auto;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0);
+        opacity: 0;
+        visibility: hidden;
+    }
+    .modal2-content {
+        background-color: #61616142;
+        border-radius: 40px;
+        backdrop-filter: blur(5px);
+        transform: translateY(0), backdrop-filter 0.5s;
+        margin: 15% auto;
+        margin-left: 50px;
+        padding: 20px;
+        border: 1px solid #888;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        width: 60%;
+        transform: scale(0.8);
+        transition: transform 0.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.2s ease;
+    }
+    .modal2.show {
+        transform: translateY(-10px);
+        opacity: 1;
+        transition: transform 0.5s;
+    }
+    .modal2.show .modal-content {
+        backdrop-filter: blur(5px);
+        opacity: 1;
+    }
+    .close {
+        position:absolute;
+        right:20px;
+        top:20px;
+        color: #aaa;
+        float: right;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transform: scale(0.8);
+        transition: transform 0.2s cubic-bezier(0.95, 0.05, 0.795, 0.035), opacity 0.2s ease; 
+    }
+    .close:hover,
+    .close:focus {
+        color: rgb(39, 39, 39);
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .activate-button{
+        margin-top: 70px;
+        width: 120px;
+        height: 30px;
+        border-radius: 8px;
+        border: none;
+        align-self: center;
+        background-color: rgba(170, 170, 170, 0.2);
+        color: white;
+        font-family: 'Space Mono', monospace;
+        cursor: pointer;
+        letter-spacing: 5px;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        border: 0.1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .guest-button{
+        margin-top: 20px;
+        margin-bottom: -20px;
+        width: 120px;
+        height: 30px;
+        border-radius: 8px;
+        border: none;
+        align-self: center;
+        background-color: rgba(170, 170, 170, 0.2);
+        color: white;
+        font-family: 'Space Mono', monospace;
+        cursor: pointer;
+        letter-spacing: 5px;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        border: 0.1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .button:active {
+    animation: bounce 0.5s ease;
+    transform: scale(0.98); /* 按下时缩小 */
+    }
+
+    @keyframes bounce {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.95); }
+        100% { transform: scale(1); }
+    }
+    #confirm-button {
+        background-color: #dcdcdc2d;
+        font-family:  'Space Mono', monospace;
+        backdrop-filter: blur(2px);
+        color: white;
+        margin-top: 20px;
+        margin-left: 150px;
+        padding: 5px 20px;
+        border: 1px solid #f4f4f49f;
+        filter: drop-shadow(2px 2px 2px rgba(10, 10, 10, 0.3));
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        transition: background-color 0.3s;
+    }
+
+    #confirm-button:hover {
+        background-color: #85858578;
+    }
         }
     </style>
-<div class="container">
+    <div class="container">
     <div class="rectangle-left">
         <img src="pic/logo.svg" width="250" alt="Logo" style="filter: drop-shadow(2px 2px 1px rgba(10, 10, 10, 0.3));">
         <p class="text">Account Login</p>
@@ -29,25 +361,219 @@
             </div>
             <div class="input-wrapper">
                 <div class="icon-base">
-                <img src="pic/edit.svg" alt="Password Icon" class="icon" style="width: 15px; height: 20px;" ></div>
-                <input type="text" id="nickname" placeholder="Nickname" class="input-box">
+                <img src="pic/lock_icon.svg" alt="Password Icon" class="icon" style="width: 18px; height: 20px;" ></div>
+                <input type="password" id="password" placeholder="Password" class="input-box">
             </div>
-            <button class="submit-button" onclick="saveID()">Login</button>
+            <button class="submit-button button" onclick="login()">Login</button>
         </div>
     </div>
     <div class="rectangle-right">
-
-        <img src="pic/code.png" width="100" alt="Logo" style="filter: drop-shadow(2px 2px 4px rgba(10, 10, 10, 0.2)); border-radius: 5px; margin-top: 150px;">
+        <button id="activate-button" class="activate-button button" onclick="openActivateModal()">Activate</button>
+        <button class="guest-button button" onclick="openGuestModal()">Guest</button>
+        <img src="pic/code.png" width="100" alt="Logo" style="filter: drop-shadow(2px 2px 4px rgba(10, 10, 10, 0.2)); border-radius: 5px; margin-top: 50px;">
         <p class="text" style="margin-top: 30px; font-size: 10px; margin-left: 50px; opacity: 60%; mix-blend-mode: overlay;">Otomad Society of Gangnam University @2024</p>
     </div>
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <p style="font-size: 15px; color: rgb(244, 244, 244);"></p>
-            <button id="confirm-button" onclick="goToNextPage()">OK</button>
+            <button id="confirm-button" class="button" onclick="goToNextPage()">OK</button>
+        </div>
+    </div>
+    <div id="modal2" class="modal2">
+        <div class="modal2-content">
+            <span class="close" onclick="closeModal2()">&times;</span>
+            <p style="font-size: 15px; color: rgb(244, 244, 244); margin-left: 150px; margin-bottom: 20px; margin-top: 30px; font-weight: bold;">Activate</p>
+            <div class="input-container" style=" display: flex; flex-direction: column; align-items: center;">
+                <div class="input-wrapper" style="display: flex; align-items: center; margin-left: 50px; margin-bottom: 30px;">
+                    <input type="text" id="userid-activate" placeholder="Student ID" class="input-box2">
+                </div>
+                <div class="input-wrapper" style="display: flex; align-items: center; margin-left: 50px; margin-bottom: 30px;">
+                    <input type="text" id="nickname-activate" placeholder="Nickname" class="input-box2">
+                </div>
+                <div class="input-wrapper" style="display: flex; align-items: center; margin-left: 50px; margin-bottom: 20px;">
+                    <input type="password" id="password-activate" placeholder="Password" class="input-box2">
+                </div>
+                <button id="confirm-button" class="button" onclick="activate()" style="width: 150px; align-self: center; margin-left: 60px; margin-bottom: 20px;">Activate</button>
+            </div>
+        </div>
+    </div>
+    <div id="guest-modal" class="modal2" style="margin-top: 100px;">
+        <div class="modal2-content" style="display: flex; flex-direction: column; align-items: center;">
+            <span class="close" onclick="closeGuestModal()">&times;</span>
+            <p style="font-size: 15px; color: rgb(244, 244, 244);">Guest Login</p>
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input type="text" id="guest-nickname" placeholder="Nickname" class="input-box2" style="margin-left: 50px;">
+                </div>
+                <button id="confirm-button" class="button" onclick="guestLogin()" style="width: 150px; align-self: center; margin-left: 60px; ">Confirm</button>
+            </div>
         </div>
     </div>
 
 
+
 </body>
+
+<script>
+
+
+function login() {
+    const userid = document.getElementById('userid').value;
+    const password = document.getElementById('password').value;
+
+    if (!/^\d+$/.test(userid)) {
+        openModal("Please enter a valid Student ID...");
+        return;
+    }
+
+    if (!validID.includes(userid)) {
+        openModal("This ID is not registered!");
+        return;
+    }
+
+    const storedPassword = localStorage.getItem('password');
+    if (password !== storedPassword) {
+        openModal("Your password is incorrect.");
+        return;
+    }
+
+    if (!localStorage.getItem('userid')) {
+        openModal("You are not activated!");
+        return;
+    }
+
+    goToNextPage();
+}
+
+function activate() {
+    const userid = document.getElementById('userid-activate').value.trim();
+    const nickname = document.getElementById('nickname-activate').value.trim();
+    const password = document.getElementById('password-activate').value.trim();
+
+    if (!/^\d+$/.test(userid)) {
+        openModal("Please enter a valid Student ID...");
+        return;
+    }
+
+    if (localStorage.getItem('userid') || localStorage.getItem('password')) {
+        openModal("You are already activated!");
+        return;
+    }
+
+    if (!validID.includes(userid)) {
+        openModal("This ID cannot be registered!");
+        return;
+    }
+
+    if (nickname.trim() === "") {
+        openModal("The nickname cannot be blank...");
+        return;
+    }
+
+    if (password.trim() === "") {
+        openModal("The password cannot be blank...");
+        return;
+    }
+
+    localStorage.setItem('userid', userid);
+    localStorage.setItem('nickname', nickname);
+    localStorage.setItem('password', password);
+    localStorage.setItem('userType', 'user');
+    closeModal2();
+    openModal("You are activated now.");
+}
+
+function openActivateModal() {
+
+    const button = document.getElementById("activate-button");
+    button.classList.add("bounce");
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            button.classList.remove('bounce');
+        }, 200);
+    });
+
+    const modal2 = document.getElementById("modal2");
+    modal2.classList.add("show");
+    modal2.style.visibility = 'visible';
+
+}
+
+
+function closeModal2() {
+    const modal2 = document.getElementById("modal2");
+    modal2.classList.remove("show");
+    modal2.classList.add("fade-out");
+    setTimeout(() => {
+        modal2.style.visibility = 'hidden';
+        modal2.classList.remove("fade-out");
+    }, 200);
+}
+function goToNextPage() {
+    window.location.href = 'main/home.html';
+    }
+
+function openModal(message, showButton = false) {
+    const modal = document.getElementById("modal");
+    const modalMessage = modal.querySelector("p");
+    modalMessage.innerText = message;
+
+    const confirmButton = document.getElementById("confirm-button");
+    confirmButton.style.display = showButton ? 'block' : 'none';
+
+    modal.style.visibility = 'visible';
+    modal.classList.add("show");
+}
+
+function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.classList.remove("show");
+    modal.classList.add("fade-out");
+    setTimeout(() => {
+        modal.style.visibility = 'hidden';
+        modal.classList.remove("fade-out");
+    }, 200);
+}
+
+function openGuestModal() {
+    const guestModal = document.getElementById("guest-modal");
+    guestModal.style.visibility = 'visible';
+    guestModal.classList.add("show");
+}
+
+function closeGuestModal() {
+    const guestModal = document.getElementById("guest-modal");
+    guestModal.classList.remove("show");
+    guestModal.classList.add("fade-out");
+    setTimeout(() => {
+        guestModal.style.visibility = 'hidden';
+        guestModal.classList.remove("fade-out");
+    }, 200);
+}
+
+
+function guestLogin() {
+    const nickname = document.getElementById('guest-nickname').value.trim();
+
+    if (nickname.trim() === "") {
+        openModal("The nickname cannot be blank...");
+        return;
+    }
+
+    if (localStorage.getItem('userid')) {
+    openModal("You are already logged in. \nCannot log in as guest.");
+    return;
+    }
+
+    localStorage.setItem('nickname', nickname);
+    localStorage.setItem('userType', 'guest');
+    closeGuestModal();
+    goToNextPage();
+    }
+
+const validID = ["1193230231", "1060124224"];
+
+
+</script>
 </html>
