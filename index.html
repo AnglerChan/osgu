@@ -215,9 +215,14 @@
   const sentences = [
     "Otomad Society of Gangnam University",
     "How's your day?",
-    "The site is under construction",
+    "The site is under construction.",
   ];
-  const hiddenSentences = ["Wait", "You seem to lose the connect with world"]
+  const hiddenSentences =
+    ["Oh.",
+      "Wait,",
+      "You seem to lose the connect with world.",
+      "Have you ever thought who you are,",
+      "And......the very possibility of your real existence?",]
   const buttonTexts = ["works", "members", "about"];
   let i = 0;
   let n = 0;
@@ -228,6 +233,7 @@
   let charIndex = 0;
   let loadingInterval;
   let currentSentence = sentences[n];
+  let hiddenKey = false;
   const loadingChars = ["|", "/", "-", "\\", "|"];
   const loadingSpan = document.createElement("span");
 
@@ -256,6 +262,7 @@
           let loadingInterval;
 
           function buttonTypeWriter() {
+            hiddenKey = true;
             if (!buttonDeleting && j < buttonText.length) {
               button.textContent += buttonText.charAt(j);
               j++;
@@ -317,9 +324,11 @@
     if (n == sentences.length - 1) {
       isLooped = true;
     }
-    if (isLooped && !isButtonTyped) {
+    if (isLooped && !hiddenKey) {
       sentences.length = 0;
       sentences.push(...hiddenSentences);
+      hiddenKey = true;
+      n = -1;
     };
   }
 
