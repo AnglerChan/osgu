@@ -182,7 +182,7 @@
 </style>
 
 <body>
-  <div class="date-container"a id="dateDisplay">
+  <div class="date-container" a id="dateDisplay">
     <span id="dayOfWeek"></span>
     <span id="dayOfMonth"></span>
   </div>
@@ -217,6 +217,7 @@
     "How's your day?",
     "The site is under construction",
   ];
+  const hiddenSentences = ["Wait", "You seem to lose the connect with world"]
   const buttonTexts = ["works", "members", "about"];
   let i = 0;
   let n = 0;
@@ -316,7 +317,12 @@
     if (n == sentences.length - 1) {
       isLooped = true;
     }
+    if (isLooped && !isButtonTyped) {
+      sentences.length = 0;
+      sentences.push(...hiddenSentences);
+    };
   }
+
 
   text.addEventListener("click", () => {
     if (!deleting) {
@@ -377,13 +383,13 @@
 
   }
 
-  setInterval(setClocks, 1000); 
+  setInterval(setClocks, 1000);
 
-  window.addEventListener('pageshow', function(event) {
-  if (event.persisted) {
-    window.location.reload();
-  }
-});
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
 </script>
 
 </html>
