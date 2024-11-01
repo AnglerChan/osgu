@@ -18,15 +18,15 @@
 
 char const*const important_literal_rules[] = {
 
-    "Rule #0x01: Don't read the website code if you are a nemcomer. \n"\
-    "            You will be very sad.\n",
+    "Rule #0x01: Don't read the website code. \n"\
+    "            You will be very sad...\n",
 
     "Rule #0x02: I want to sleep for now"
 };
 
 int main(const int argc, const char* argv[argc+1]) {
 
-    do_something();
+    typewriter();
     return EXIT_SUCCESS;
 }
 ```
