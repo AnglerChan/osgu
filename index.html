@@ -1,95 +1,378 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>O.S.G.U.</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap"
-      rel="stylesheet"
-    />
-  </head>
 
-  <style>
-    body {
-      height: 100vh;
-      width: 100vw;
-      margin: 0;
-      background-color: #000000;
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      font-family: "Space Mono", monospace;
+<head>
+  <title>O.S.G.U.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet" />
+</head>
+
+<style>
+  body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    background-color: #000000;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: "Space Mono", monospace;
+  }
+
+  .text-container {
+    font-size: large;
+    white-space: nowrap;
+    position: absolute;
+  }
+
+  .text {
+    font-size: large;
+    border-right: 10px solid;
+    line-height: 0.6;
+    width: 100%;
+    height: 10%;
+    display: inline-block;
+    animation: cursor 0.4s step-end infinite alternate;
+  }
+
+  @keyframes cursor {
+    30% {
+      border-color: transparent;
     }
+  }
 
-    .text-container {
-      font-size: large;
-      white-space: nowrap;
-    }
+  .button-container {
+    display: flex;
+    margin-top: 300px;
+    position: absolute;
+  }
 
-    .text {
-      font-size: large;
-      border-right: 10px solid; /*width of cursor */
-      line-height: 0.6; /* height of cursor */
-      width: 100%;
-      height: 10%;
-      display: inline-block;
-      animation: cursor 0.4s step-end infinite alternate;
-    }
+  .button {
+    font-size: large;
+    position: relative;
+    line-height: 1;
+    width: 150px;
+    animation: button_cursor 0.4s step-end infinite alternate;
+  }
 
-    @keyframes cursor {     /*cursor blinking*/
-      30% {
-        border-color: transparent;
-      }
-    }
-  </style>
+  #button1 {
+    translate: 30px;
+  }
 
-  <body>
-    <div class="text-container">
-      <span class="text" style="font-weight: 500"></span>
+  #button2 {
+    translate: 30px;
+  }
+
+  #button3 {
+    translate: 55px;
+  }
+
+  .date-container {
+    background-color: white;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    top: -200px;
+    right: 400px;
+    color: #000000;
+  }
+
+  #dayOfWeek {
+    font-size: 2em;
+    margin-bottom: 5px;
+  }
+
+  #dayOfMonth {
+    font-size: 3em;
+    font-weight: bold;
+    margin-left: 50px;
+  }
+
+  .clock-container {
+    position: fixed;
+    bottom: 100px;
+    right: 200px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .clock {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    position: relative;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  #minuteClock {
+    background-color: gray;
+  }
+
+  #hourClock {
+    background-color: rgb(56, 56, 56);
+  }
+
+  .hand {
+    background-color: #333;
+    position: absolute;
+    transform-origin: 50% 100%;
+  }
+
+  .hour-hand {
+    width: 3px;
+    height: 30px;
+    top: -5px;
+    left: 23.5px;
+    background-color: transparent;
+  }
+
+  .hour-hand::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 6px;
+    height: 10px;
+    background-color: black;
+  }
+
+  .minute-hand {
+    width: 2px;
+    height: 20px;
+    top: 5px;
+    left: 24px;
+    background-color: transparent;
+  }
+
+  .minute-hand::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 4px;
+    height: 16px;
+    background-color: black;
+  }
+
+  .second-hand {
+    width: 1px;
+    height: 25px;
+    top: 0px;
+    left: 24.5px;
+    background-color: red;
+  }
+
+  .clock-number {
+    font-size: 12px;
+    margin-left: 60px;
+  }
+</style>
+
+<body>
+  <div class="date-container"a id="dateDisplay">
+    <span id="dayOfWeek"></span>
+    <span id="dayOfMonth"></span>
+  </div>
+  <div class="text-container">
+    <span class="text" style="font-weight: 500"></span>
+  </div>
+  <div class="button-container">
+    <span class="button" id="button1" data-target="main/works.html"></span>
+    <span class="button" id="button2" data-target="main/members.html"></span>
+    <span class="button" id="button3" data-target="main/about.html"></span>
+    <div class="clock-container">
+      <div class="clock" id="hourClock">
+        <div class="hand hour-hand"></div>
+        <span class="clock-number hour-number"></span>
+      </div>
+      <div class="clock" id="minuteClock">
+        <div class="hand minute-hand"></div>
+        <span class="clock-number minute-number"></span>
+      </div>
+      <div class="clock" id="secondClock">
+        <div class="hand second-hand"></div>
+        <span class="clock-number second-number"></span>
+      </div>
     </div>
-  </body>
-  <script>
-    const text = document.querySelector(".text");
-    const sentences = [
-      "Otomad Society of Gangnam University",
-      "This is Liu Haoxiang",
-      "This is the third sentence.",
-      "And this is the fourth sentence!",
-    ];
-    let i = 0;
-    let n = 0;
-    let deleting = false;
-    let currentSentence = sentences[n];
+    <audio id="typeSound" src="sounds/clap.ogg"></audio>
+</body>
+<script>
+  const text = document.querySelector(".text");
+  const buttons = document.querySelectorAll(".button");
+  const sentences = [
+    "Otomad Society of Gangnam University",
+    "How's your day?",
+    "The site is under construction",
+  ];
+  const buttonTexts = ["works", "members", "about"];
+  let i = 0;
+  let n = 0;
+  let deleting = false;
+  let isLooped = false;
+  let isButtonTyped = false;
+  let isTyping = true;
+  let charIndex = 0;
+  let loadingInterval;
+  let currentSentence = sentences[n];
+  const loadingChars = ["|", "/", "-", "\\", "|"];
+  const loadingSpan = document.createElement("span");
 
-    function typeWriter() {
-      if (!deleting && i < currentSentence.length) {
-        text.textContent += currentSentence.charAt(i);
-        i++;
-        setTimeout(typeWriter, 50);
-      } else if (deleting && i > 0) {
-        text.textContent = text.textContent.slice(0, -1);
-        i--;
-        setTimeout(typeWriter, 50);
-      } else if (deleting && i === 0) {
-        deleting = false;
-        nextSentence();
-        setTimeout(typeWriter, 50);
+  async function typeWriter() {
+    if (!deleting && i < currentSentence.length) {
+      text.textContent += currentSentence.charAt(i);
+      i++;
+      setTimeout(typeWriter, 50);
+    } else if (deleting && i > 0) {
+      text.textContent = text.textContent.slice(0, -1);
+      i--;
+      setTimeout(typeWriter, 50);
+    } else if (deleting && i === 0) {
+      deleting = false;
+      nextSentence();
+      setTimeout(typeWriter, 50);
+    } else if (i === currentSentence.length) {
+      for (let k = 0; k < buttons.length; k++) {
+        await new Promise((resolve) => {
+          let button = buttons[k];
+          let buttonText = buttonTexts[k];
+          let j = 0;
+          let buttonDeleting = false;
+          let isButtonTyped = false;
+          let isTyping = true;
+          let loadingInterval;
+
+          function buttonTypeWriter() {
+            if (!buttonDeleting && j < buttonText.length) {
+              button.textContent += buttonText.charAt(j);
+              j++;
+              setTimeout(buttonTypeWriter, 100);
+            } else if (buttonDeleting && j > 0) {
+              button.textContent = button.textContent.slice(0, -1);
+              j--;
+              setTimeout(buttonTypeWriter, 100);
+            } else if (buttonDeleting && j === 0) {
+              window.location.href = button.dataset.target;
+            } else {
+              isButtonTyped = true;
+              isTyping = false;
+              resolve();
+            }
+          }
+
+          if (n < 1 && isLooped == false) buttonTypeWriter();
+
+          button.addEventListener("click", () => {
+            if (!buttonDeleting) {
+              buttonDeleting = true;
+              isTyping = true;
+              buttonTypeWriter();
+            }
+          });
+
+          button.addEventListener("mouseover", () => {
+            if (!isTyping && isButtonTyped && !button.contains(loadingSpan)) {
+              loadingSpan.textContent = "|";
+              loadingSpan.style.marginLeft = "10px";
+              loadingSpan.style.fontSize = "12px";
+              loadingSpan.style.fontWeight = "bold";
+              button.appendChild(loadingSpan);
+
+              loadingInterval = setInterval(() => {
+                loadingSpan.textContent = loadingChars[charIndex];
+                charIndex = (charIndex + 1) % loadingChars.length;
+              }, 200);
+            }
+          });
+
+          button.addEventListener("mouseout", () => {
+            clearInterval(loadingInterval);
+            if (button.contains(loadingSpan)) {
+              button.removeChild(loadingSpan);
+            }
+          });
+        });
       }
     }
+  }
 
-    function nextSentence() {
-      n = (n + 1) % sentences.length;
-      currentSentence = sentences[n];
+  typeWriter();
+
+  function nextSentence() {
+    n = (n + 1) % sentences.length;
+    currentSentence = sentences[n];
+    if (n == sentences.length - 1) {
+      isLooped = true;
+    }
+  }
+
+  text.addEventListener("click", () => {
+    if (!deleting) {
+      deleting = true;
+      typeWriter();
+    }
+  });
+
+  function updateDate() {
+    const dayOfWeekDisplay = document.getElementById("dayOfWeek");
+    const dayOfMonthDisplay = document.getElementById("dayOfMonth");
+    const now = new Date();
+
+    let dayOfWeek = now
+      .toLocaleDateString("en-US", { weekday: "short" })
+      .toLowerCase();
+    dayOfWeek += ".";
+
+    let dayOfMonth = now.getDate();
+    if (dayOfMonth < 10) {
+      dayOfMonth = "0" + dayOfMonth;
     }
 
-    typeWriter();
+    dayOfWeekDisplay.textContent = dayOfWeek;
+    dayOfMonthDisplay.textContent = dayOfMonth;
+  }
 
-    text.addEventListener("click", () => {
-      if (!deleting) {
-        deleting = true;
-        typeWriter();
-      }
-    });
-  </script>
+  updateDate();
+  setInterval(updateDate, 60000);
+
+  function setClocks() {
+    const now = new Date();
+    const hours = now.getHours() % 12;
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    const hourHand = document.querySelector("#hourClock .hour-hand");
+    const minuteHand = document.querySelector("#minuteClock .minute-hand");
+    const secondHand = document.querySelector("#secondClock .second-hand");
+    const hourNumber = document.querySelector(".hour-number");
+    const minuteNumber = document.querySelector(".minute-number");
+    const secondNumber = document.querySelector(".second-number");
+
+
+
+    const hourDeg = (hours * 30) + (minutes / 2);
+    const minuteDeg = minutes * 6;
+    const secondDeg = seconds * 6;
+
+    hourHand.style.transform = `rotate(${hourDeg}deg)`;
+    minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+    secondHand.style.transform = `rotate(${secondDeg
+      }deg)`;
+
+    hourNumber.textContent = hours.toString().padStart(2, '0');
+    minuteNumber.textContent = minutes.toString().padStart(2, '0');
+    secondNumber.textContent = seconds.toString().padStart(2, '0');
+
+  }
+
+  setInterval(setClocks, 1000); 
+</script>
+
 </html>
