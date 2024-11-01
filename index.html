@@ -177,7 +177,7 @@
 </style>
 
 <body>
-  <div class="date-container"a id="dateDisplay">
+  <div class="date-container" a id="dateDisplay">
     <span id="dayOfWeek"></span>
     <span id="dayOfMonth"></span>
   </div>
@@ -372,7 +372,13 @@
 
   }
 
-  setInterval(setClocks, 1000); 
+  setInterval(setClocks, 1000);
+
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
 </script>
 
 </html>
