@@ -171,7 +171,7 @@
             }
         }
 
-        _truncateSpan(sections, index, XCoord, trunLen) {
+        __truncateSpan(sections, index, XCoord, trunLen) {
             let section = sections[index];
             let oldEndingPoz = section.Xpoz + section.length;
             let oldText = section.span.textContent;
@@ -236,10 +236,27 @@
             if (XCoord + emptyLength > this.width) { return -1; }
             let line = this.lines[YCoord];
             for (let i = 0; i < line.sections.length; i ++) {
-                this._truncateSpan(line.sections, i, XCoord, emptyLength);
+                this.__truncateSpan(line.sections, i, XCoord, emptyLength);
             }
             return 0;
         }
+
+        _fitSpan(YCoord, XCoord, pendingSpan) {
+            let line = this.lines[YCoord];
+            for (let i = 0; i < line.sections.length - 1; i ++) {
+                let gapLen = line.sections[i + 1].Xpoz - (line.sections[i].Xpoz + line.sections[i].length);
+                if (pendingSpan.textContent.length <= gapLen) {
+                    if (XCoord >= line.sections[i + 1].Xpoz) {
+                        line.sections.splice(i + 1, 0, 
+                                    { span: pendingSpan, Xpoz: line.sections[i].Xpoz + line.sections[i].length, length: gapLen});
+                        break;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        
     }
 
     document.body.innerHTML = '<div class="consoleOut-container" id="conOut-div0"></div>';
