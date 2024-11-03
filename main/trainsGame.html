@@ -388,7 +388,7 @@
         for (let i = 0; i < HEIGHT; i = (i + 1) % HEIGHT) {
             for (let j = -10; j < WIDTH; j ++) {
                 conOut.setRawText(i, j, rawTexts[rI]);   
-                await asyncSleep(1000 / 60);       
+                await asyncSleep(1000 / 20);       
             }
             if (i == HEIGHT - 1) { rI = (rI + 1) % 2;}
         }
