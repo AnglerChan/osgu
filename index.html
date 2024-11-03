@@ -18,7 +18,19 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    overflow: hidden;
     font-family: "Space Mono", monospace;
+  }
+
+  :root {
+    --date-color: white;
+    --date-font-color: black;
+    --clock-dark-color: gray;
+    --clock-darker-color: rgb(56, 56, 56);
+    --clock-hand-color: black;
+    --selection-color: black;
+    --selection-background-color: white;
+    --bulb-color: white;
   }
 
   .text-container {
@@ -70,13 +82,13 @@
   }
 
   .date-container {
-    background-color: white;
+    background-color: var(--date-color);
     width: 100px;
     height: 100px;
     position: relative;
     top: -200px;
     right: 400px;
-    color: #000000;
+    color: var(--date-font-color);
   }
 
   #dayOfWeek {
@@ -99,11 +111,12 @@
     flex-direction: column;
   }
 
+
   .clock {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background-color: var(--date-color);
     position: relative;
     margin-bottom: 5px;
     display: flex;
@@ -111,15 +124,15 @@
   }
 
   #minuteClock {
-    background-color: gray;
+    background-color: var(--clock-dark-color);
   }
 
   #hourClock {
-    background-color: rgb(56, 56, 56);
+    background-color: var(--clock-darker-color);
   }
 
   .hand {
-    background-color: #333;
+    background-color: var(--clock-hand-color);
     position: absolute;
     transform-origin: 50% 100%;
   }
@@ -140,7 +153,8 @@
     transform: translate(-50%, -100%);
     width: 6px;
     height: 10px;
-    background-color: black;
+    background-color: var(--clock-hand-color);
+    ;
   }
 
   .minute-hand {
@@ -159,7 +173,8 @@
     transform: translate(-50%, -100%);
     width: 4px;
     height: 16px;
-    background-color: black;
+    background-color: var(--clock-hand-color);
+    ;
   }
 
   .second-hand {
@@ -176,13 +191,87 @@
   }
 
   ::selection {
-    color: black;
-    background: white;
+    color: var(--selection-color);
+    background: var(--selection-background-color);
+  }
+
+  body.light-switch {
+    background-color: #ffffff;
+    color: #000000;
+    --date-color: black;
+    --date-font-color: white;
+    --clock-dark-color: rgb(56, 56, 56);
+    --clock-darker-color: gray;
+    --clock-hand-color: white;
+    --selection-color: white;
+    --selection-background-color: black;
+    --bulb-color: black;
+  }
+
+  .bulb {
+    width: 20px;
+    position: absolute;
+    bottom: 80px;
+    left: 330px;
+    z-index: 1;
+    animation: fall 1s ease-in paused;
+  }
+
+  .new-bulb {
+    width: 20px;
+    position: absolute;
+    top: 80px;
+    right: 330px;
+    z-index: 1;
+  }
+
+  @keyframes fall {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(170px);
+    }
+  }
+
+  svg path {
+    fill: var(--bulb-color);
+  }
+
+  .girl-container {
+    position: absolute;
+    bottom: 500px;
+    left: 80px;
+  }
+
+  .girl {
+    opacity: 0;
+    position: absolute;
+    height: 500px;
+  }
+
+  .girl.active {
+    opacity: 1;
+    position: absolute;
+    height: 500px;
   }
 </style>
 
 <body>
-  <div class="date-container" a id="dateDisplay">
+  <svg t="1730560114385" class="bulb" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    p-id="1497" width="200" height="200">
+    <path
+      d="M671.104 596.096a384.469333 384.469333 0 0 1-31.936 39.808c0.064 1.472 0.832 2.688 0.832 4.096v128c0 35.392-28.608 64-64 64h-128c-35.392 0-64-28.608-64-64v-128c0-1.408 0.768-2.624 0.832-4.032a384.469333 384.469333 0 0 1-31.936-39.808C257.216 540.8 192 438.528 192 320 192 143.232 335.232 0 512 0s320 143.232 320 320c0 118.528-65.216 220.8-160.896 276.096zM480 896h64a32 32 0 0 1 0 64h-64a32 32 0 0 1 0-64z"
+      p-id="1498">
+    </path>
+  </svg>
+  <div class="girl-container">
+    <img class="girl" src="pic/fall1.png">
+    <img class="girl" src="pic/fall2.png">
+    <img class="girl" src="pic/fall3.png">
+  </div>
+  <div class="date-container" id="dateDisplay">
     <span id="dayOfWeek"></span>
     <span id="dayOfMonth"></span>
   </div>
@@ -220,9 +309,14 @@
   const hiddenSentences =
     ["Oh.",
       "Wait,",
-      "You seem to lose the connect with world.",
+      "You seem to lose the connection with world.",
       "Have you ever thought who you are,",
-      "And......the very possibility of your real existence?",]
+      "And......the very possibility of your real existence?",
+      "Perhaps we could only figure something out in a brighter space.",
+      "brighter.",
+      "brighter..",
+      "brighter..."]
+  const toggleLightSentence = "[Now hit 'l' to make here brighter or darker.]"
   const buttonTexts = ["works", "members", "about"];
   let i = 0;
   let n = 0;
@@ -234,6 +328,7 @@
   let loadingInterval;
   let currentSentence = sentences[n];
   let hiddenKey = false;
+  let sentencePushed = false;
   const loadingChars = ["|", "/", "-", "\\", "|"];
   const loadingSpan = document.createElement("span");
 
@@ -251,6 +346,11 @@
       nextSentence();
       setTimeout(typeWriter, 50);
     } else if (i === currentSentence.length) {
+      if (hiddenKey && currentSentence  === "brighter..." && !bulbFall) bulb.style.visibility = 'visible';
+      if (bulbBroken && !sentencePushed) {
+        sentences.push(toggleLightSentence);
+        sentencePushed = true;
+      }
       for (let k = 0; k < buttons.length; k++) {
         await new Promise((resolve) => {
           let button = buttons[k];
@@ -394,11 +494,69 @@
 
   setInterval(setClocks, 1000);
 
+  const bulb = document.querySelector('.bulb');
+  const body = document.body;
+  bulb.style.visibility = 'hidden';
+
+  bulb.addEventListener('click', () => {
+    body.classList.toggle('light-switch');
+    if (!bulbFall)
+      toggleImages();
+  });
+
+  const images = document.querySelectorAll('.girl');
+  let currentImage = 0;
+  let bulbFall = false;
+  let bulbBroken = false;
+
+
+  function toggleImages() {
+    images[currentImage].classList.add('active');
+
+    setTimeout(function () {
+      images[currentImage].classList.remove('active');
+
+      currentImage = Math.min(currentImage + 1, images.length - 1);
+
+      images[currentImage].classList.add('active');
+
+      if (currentImage == images.length - 1) bulbFall = true;
+
+      if (bulbFall) {
+        bulb.style.animationPlayState = 'running';
+        setTimeout(function () {
+          const girlContainer = document.querySelector('.girl-container');
+          girlContainer.remove();
+          bulb.style.visibility = 'hidden';
+          body.classList.toggle('light-switch');
+          localStorage.setItem('bulbBroken', 'true');
+        }, 1000);
+      }
+
+      if (currentImage < images.length - 1) {
+        setTimeout(toggleImages, 100);
+      }
+    }, 100);
+
+
+  }
+  if (localStorage.getItem('bulbBroken') == 'true') {
+    bulbBroken = true;
+    bulb.parentNode.removeChild(bulb);
+  }
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'l' && bulbBroken) {
+      body.classList.toggle('light-switch');
+    }
+  });
+
   window.addEventListener('pageshow', function (event) {
     if (event.persisted) {
       window.location.reload();
     }
   });
+
 </script>
 
 </html>
