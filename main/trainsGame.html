@@ -416,7 +416,7 @@
         }
 
         setRawText(YCoord, XCoord, text) {
-            // if (YCoord >= this.h || YCoord < 0 || XCoord < 0 || XCoord + text.length > this.w) { return 0; }
+            if (YCoord >= this.h || YCoord < 0) { return 0; }
             let line = this.lines[YCoord];
             let concernedInfo = this._getConcernedSpanInfo(line, XCoord, text.length);
             let i = 0;
@@ -437,7 +437,7 @@
         }
 
         setStyle(YCoord, XCoord, length, emptyStyleSpan) {
-            if (YCoord >= this.h || YCoord < 0 || XCoord < 0 || XCoord + length > this.w) { return 0; }
+            if (YCoord >= this.h || YCoord < 0) { return 0; }
             let text = this.getRawText(YCoord, XCoord, length);
             let dupSpan = emptyStyleSpan.cloneNode(true);
             dupSpan.textContent = text;
