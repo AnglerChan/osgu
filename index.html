@@ -195,7 +195,7 @@
     background: var(--selection-background-color);
   }
 
-  body.light-switch {
+  body.light {
     background-color: #ffffff;
     color: #000000;
     --date-color: black;
@@ -215,14 +215,6 @@
     left: 330px;
     z-index: 1;
     animation: fall 1s ease-in paused;
-  }
-
-  .new-bulb {
-    width: 20px;
-    position: absolute;
-    top: 80px;
-    right: 330px;
-    z-index: 1;
   }
 
   @keyframes fall {
@@ -329,93 +321,100 @@
   let currentSentence = sentences[n];
   let hiddenKey = false;
   let sentencePushed = false;
+  let lightMode = 'dark-mode';
   const loadingChars = ["|", "/", "-", "\\", "|"];
   const loadingSpan = document.createElement("span");
 
   async function typeWriter() {
-    if (!deleting && i < currentSentence.length) {
+    function typeCharcter() {
       text.textContent += currentSentence.charAt(i);
       i++;
       setTimeout(typeWriter, 50);
-    } else if (deleting && i > 0) {
+    }
+    function deleteCharacter() {
       text.textContent = text.textContent.slice(0, -1);
       i--;
       setTimeout(typeWriter, 50);
+    }
+
+    if (!deleting && i < currentSentence.length) {
+      typeCharcter();
+    } else if (deleting && i > 0) {
+      deleteCharacter();
     } else if (deleting && i === 0) {
       deleting = false;
       nextSentence();
       setTimeout(typeWriter, 50);
     } else if (i === currentSentence.length) {
-      if (hiddenKey && currentSentence  === "brighter..." && !bulbFall) bulb.style.visibility = 'visible';
+      if (hiddenKey && currentSentence === "brighter..." && !bulbFall) bulb.style.visibility = 'visible';
       if (bulbBroken && !sentencePushed) {
         sentences.push(toggleLightSentence);
         sentencePushed = true;
       }
-      for (let k = 0; k < buttons.length; k++) {
-        await new Promise((resolve) => {
-          let button = buttons[k];
-          let buttonText = buttonTexts[k];
-          let j = 0;
-          let buttonDeleting = false;
-          let isButtonTyped = false;
-          let isTyping = true;
-          let loadingInterval;
+      handleButtons();
 
-          function buttonTypeWriter() {
-            hiddenKey = true;
-            if (!buttonDeleting && j < buttonText.length) {
-              button.textContent += buttonText.charAt(j);
-              j++;
-              setTimeout(buttonTypeWriter, 100);
-            } else if (buttonDeleting && j > 0) {
-              button.textContent = button.textContent.slice(0, -1);
-              j--;
-              setTimeout(buttonTypeWriter, 100);
-            } else if (buttonDeleting && j === 0) {
-              window.location.href = button.dataset.target;
-            } else {
-              isButtonTyped = true;
-              isTyping = false;
-              resolve();
+      async function handleButtons() {
+        for (let k = 0; k < buttons.length; k++) {
+          await new Promise((resolve) => {
+            let button = buttons[k];
+            let buttonText = buttonTexts[k];
+            let j = 0;
+            let buttonDeleting = false;
+
+            function buttonTypeWriter() {
+              hiddenKey = true;
+              if (!buttonDeleting && j < buttonText.length) {
+                button.textContent += buttonText.charAt(j);
+                j++;
+                setTimeout(buttonTypeWriter, 100);
+              } else if (buttonDeleting && j > 0) {
+                button.textContent = button.textContent.slice(0, -1);
+                j--;
+                setTimeout(buttonTypeWriter, 100);
+              } else if (buttonDeleting && j === 0) {
+                window.location.href = button.dataset.target;
+              } else {
+                isButtonTyped = true;
+                isTyping = false;
+                resolve();
+              }
             }
-          }
 
-          if (n < 1 && isLooped == false) buttonTypeWriter();
+            if (n < 1 && isLooped == false) buttonTypeWriter();
+            button.addEventListener("click", () => {
+              if (!buttonDeleting) {
+                buttonDeleting = true;
+                isTyping = true;
+                buttonTypeWriter();
+              }
+            });
 
-          button.addEventListener("click", () => {
-            if (!buttonDeleting) {
-              buttonDeleting = true;
-              isTyping = true;
-              buttonTypeWriter();
-            }
+            button.addEventListener("mouseover", () => {
+              if (!isTyping && isButtonTyped && !button.contains(loadingSpan)) {
+                loadingSpan.textContent = "|";
+                loadingSpan.style.marginLeft = "10px";
+                loadingSpan.style.fontSize = "12px";
+                loadingSpan.style.fontWeight = "bold";
+                button.appendChild(loadingSpan);
+                loadingInterval = setInterval(() => {
+                  loadingSpan.textContent = loadingChars[charIndex];
+                  charIndex = (charIndex + 1) % loadingChars.length;
+                }, 200);
+              }
+            });
+
+            button.addEventListener("mouseout", () => {
+              clearInterval(loadingInterval);
+              if (button.contains(loadingSpan)) {
+                button.removeChild(loadingSpan);
+              }
+            });
           });
-
-          button.addEventListener("mouseover", () => {
-            if (!isTyping && isButtonTyped && !button.contains(loadingSpan)) {
-              loadingSpan.textContent = "|";
-              loadingSpan.style.marginLeft = "10px";
-              loadingSpan.style.fontSize = "12px";
-              loadingSpan.style.fontWeight = "bold";
-              button.appendChild(loadingSpan);
-
-              loadingInterval = setInterval(() => {
-                loadingSpan.textContent = loadingChars[charIndex];
-                charIndex = (charIndex + 1) % loadingChars.length;
-              }, 200);
-            }
-          });
-
-          button.addEventListener("mouseout", () => {
-            clearInterval(loadingInterval);
-            if (button.contains(loadingSpan)) {
-              button.removeChild(loadingSpan);
-            }
-          });
-        });
+        }
       }
+
     }
   }
-
   typeWriter();
 
   function nextSentence() {
@@ -431,7 +430,6 @@
       n = -1;
     };
   }
-
 
   text.addEventListener("click", () => {
     if (!deleting) {
@@ -449,7 +447,6 @@
       .toLocaleDateString("en-US", { weekday: "short" })
       .toLowerCase();
     dayOfWeek += ".";
-
     let dayOfMonth = now.getDate();
     if (dayOfMonth < 10) {
       dayOfMonth = "0" + dayOfMonth;
@@ -467,16 +464,12 @@
     const hours = now.getHours() % 12;
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
-
     const hourHand = document.querySelector("#hourClock .hour-hand");
     const minuteHand = document.querySelector("#minuteClock .minute-hand");
     const secondHand = document.querySelector("#secondClock .second-hand");
     const hourNumber = document.querySelector(".hour-number");
     const minuteNumber = document.querySelector(".minute-number");
     const secondNumber = document.querySelector(".second-number");
-
-
-
     const hourDeg = (hours * 30) + (minutes / 2);
     const minuteDeg = minutes * 6;
     const secondDeg = seconds * 6;
@@ -485,11 +478,9 @@
     minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
     secondHand.style.transform = `rotate(${secondDeg
       }deg)`;
-
     hourNumber.textContent = hours.toString().padStart(2, '0');
     minuteNumber.textContent = minutes.toString().padStart(2, '0');
     secondNumber.textContent = seconds.toString().padStart(2, '0');
-
   }
 
   setInterval(setClocks, 1000);
@@ -499,7 +490,7 @@
   bulb.style.visibility = 'hidden';
 
   bulb.addEventListener('click', () => {
-    body.classList.toggle('light-switch');
+    body.classList.toggle('light');
     if (!bulbFall)
       toggleImages();
   });
@@ -509,37 +500,29 @@
   let bulbFall = false;
   let bulbBroken = false;
 
-
   function toggleImages() {
     images[currentImage].classList.add('active');
-
     setTimeout(function () {
       images[currentImage].classList.remove('active');
-
       currentImage = Math.min(currentImage + 1, images.length - 1);
-
       images[currentImage].classList.add('active');
-
       if (currentImage == images.length - 1) bulbFall = true;
-
       if (bulbFall) {
         bulb.style.animationPlayState = 'running';
         setTimeout(function () {
           const girlContainer = document.querySelector('.girl-container');
           girlContainer.remove();
           bulb.style.visibility = 'hidden';
-          body.classList.toggle('light-switch');
+          body.classList.toggle('light');
           localStorage.setItem('bulbBroken', 'true');
         }, 1000);
       }
-
       if (currentImage < images.length - 1) {
         setTimeout(toggleImages, 100);
       }
     }, 100);
-
-
   }
+
   if (localStorage.getItem('bulbBroken') == 'true') {
     bulbBroken = true;
     bulb.parentNode.removeChild(bulb);
@@ -547,16 +530,28 @@
 
   document.addEventListener('keydown', function (event) {
     if (event.key === 'l' && bulbBroken) {
-      body.classList.toggle('light-switch');
+      body.classList.toggle('light');
+
+      if (body.classList.contains('light')) {
+        lightMode = 'light-mode';
+      } else {
+        lightMode = 'dark-mode';
+      }
+      localStorage.setItem('lightMode', lightMode);
     }
   });
+
+  (function () {
+    if (localStorage.getItem("lightMode") == "light-mode") {
+      body.classList.add('light');
+    }
+  })();
 
   window.addEventListener('pageshow', function (event) {
     if (event.persisted) {
       window.location.reload();
     }
   });
-
 </script>
 
 </html>
