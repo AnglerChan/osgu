@@ -33,6 +33,19 @@
     --bulb-color: white;
   }
 
+  body.light {
+    background-color: #ffffff;
+    color: #000000;
+    --date-color: black;
+    --date-font-color: white;
+    --clock-dark-color: rgb(56, 56, 56);
+    --clock-darker-color: gray;
+    --clock-hand-color: white;
+    --selection-color: white;
+    --selection-background-color: black;
+    --bulb-color: black;
+  }
+
   .text-container {
     font-size: large;
     white-space: nowrap;
@@ -193,19 +206,6 @@
   ::selection {
     color: var(--selection-color);
     background: var(--selection-background-color);
-  }
-
-  body.light {
-    background-color: #ffffff;
-    color: #000000;
-    --date-color: black;
-    --date-font-color: white;
-    --clock-dark-color: rgb(56, 56, 56);
-    --clock-darker-color: gray;
-    --clock-hand-color: white;
-    --selection-color: white;
-    --selection-background-color: black;
-    --bulb-color: black;
   }
 
   .bulb {
@@ -529,7 +529,7 @@
   }
 
   document.addEventListener('keydown', function (event) {
-    if (event.key === 'l' && bulbBroken) {
+    if ((event.key === 'l' || event.key === 'L') && bulbBroken) {
       body.classList.toggle('light');
 
       if (body.classList.contains('light')) {
