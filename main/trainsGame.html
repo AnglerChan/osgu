@@ -9,6 +9,8 @@
 </head>
 
 <style>
+    
+
     :root {
         --background-color: #000000;
         --text-color: #ffffff;
@@ -34,7 +36,7 @@
         justify-content: center;
         align-items: center;
         font-family: 'Space Mono', monospace;
-        user-select: none;
+        user-select: none;       
     }
 
     .consoleOut-container {
@@ -51,6 +53,7 @@
         /* This took me two hours to figure out!! Fuck!! */
         display: inline-block;
     }
+
 </style>
 
 <body>
@@ -116,7 +119,7 @@
         let sy = (y0 < y1) ? 1 : -1;
         let err = dx - dy;
         while (true) {
-            plotFunc(x0, y0);
+            plotFunc(x0, y0); 
             if (x0 === x1 && y0 === y1) break;
             let e2 = 2 * err;
             if (e2 > -dy) {
@@ -147,12 +150,12 @@
         constructor() {
             // Permutation table
             this.p = new Array(256);
-            for (let i = 0; i < 256; i++) {
+            for(let i = 0; i < 256; i++) {
                 this.p[i] = i;
             }
 
             // Shuffle permutation table
-            for (let i = 255; i > 0; i--) {
+            for(let i = 255; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [this.p[i], this.p[j]] = [this.p[j], this.p[i]];
             }
@@ -205,21 +208,21 @@
                 this.lerp(v,
                     this.lerp(u,
                         this.grad(this.p[AA], x, y, z),
-                        this.grad(this.p[BA], x - 1, y, z)
+                        this.grad(this.p[BA], x-1, y, z)
                     ),
                     this.lerp(u,
-                        this.grad(this.p[AB], x, y - 1, z),
-                        this.grad(this.p[BB], x - 1, y - 1, z)
+                        this.grad(this.p[AB], x, y-1, z),
+                        this.grad(this.p[BB], x-1, y-1, z)
                     )
                 ),
                 this.lerp(v,
                     this.lerp(u,
-                        this.grad(this.p[AA + 1], x, y, z - 1),
-                        this.grad(this.p[BA + 1], x - 1, y, z - 1)
+                        this.grad(this.p[AA+1], x, y, z-1),
+                        this.grad(this.p[BA+1], x-1, y, z-1)
                     ),
                     this.lerp(u,
-                        this.grad(this.p[AB + 1], x, y - 1, z - 1),
-                        this.grad(this.p[BB + 1], x - 1, y - 1, z - 1)
+                        this.grad(this.p[AB+1], x, y-1, z-1),
+                        this.grad(this.p[BB+1], x-1, y-1, z-1)
                     )
                 )
             );
@@ -480,15 +483,15 @@
     */
     class Game {
         static Cars = {
-            'Series 201': {
-                'name': '201-Kei',
-                'maxPower': 625000.0,   // Watts
-                'maxForce': 40000.0,    // Newtons
-                'maxBreakForce': 40000.0,    // Newtons
-                'weight': 35000.0,    // Kilograms
-                'dragCoef': 55.0,       // N / (m/s)^2
-                'fricCoef': 0.10,       // N / kg
-                'centerOfMass': 1.0         // Meters (Height)
+            'Series 201' : {
+                'name'          : '201-Kei',
+                'maxPower'      : 625000.0,   // Watts
+                'maxForce'      : 40000.0,    // Newtons
+                'maxBreakForce' : 40000.0,    // Newtons
+                'weight'        : 35000.0,    // Kilograms
+                'dragCoef'      : 55.0,       // N / (m/s)^2
+                'fricCoef'      : 0.10,       // N / kg
+                'centerOfMass'  : 1.0         // Meters (Height)
             }
         }
 
@@ -526,21 +529,19 @@
     async function testDisplay(conOut) {
         let rawTexts = [' nothing', '.NOTHING'];
         let hintTexts = ['[Shift] + [SpaceBar] :  Next',
-            '                            '];
+                         '                            '];
         let rI = 1;
         let showHint = 1;
         let blinkLastMS = ms();
         let hintI = 0;
-        setTimeout(() => {
-            showHint = 0;
-            conOut.setRawTextMid(HEIGHT - 10, WIDTH / 2, hintTexts[1])
-        }, 10000);
+        setTimeout(() => { showHint = 0; 
+            conOut.setRawTextMid(HEIGHT - 10, WIDTH / 2, hintTexts[1]) }, 10000);
         outerLoop:
         for (let i = 0; i < HEIGHT; i = (i + 1) % HEIGHT) {
-            for (let j = -10; j < WIDTH; j++) {
-                conOut.setRawText(i, j, rawTexts[rI]);
-                if (showHint) {
-                    if (blinkLastMS < ms() - 750) {
+            for (let j = -10; j < WIDTH; j ++) {
+                conOut.setRawText(i, j, rawTexts[rI]);   
+                if (showHint) { 
+                    if (blinkLastMS < ms() - 750) { 
                         blinkLastMS = ms();
                         conOut.setRawTextMid(HEIGHT - 10, WIDTH / 2, hintTexts[hintI]);
                         hintI = (hintI + 1) % 2;
@@ -549,7 +550,7 @@
                 await asyncSleep(1000 / 20);
                 if (testBreakOut) { break outerLoop; }
             }
-            if (i == HEIGHT - 1) { rI = (rI + 1) % 2; }
+            if (i == HEIGHT - 1) { rI = (rI + 1) % 2;}
         }
         testBreakOut = 0;
         conOut.clsStyle();
@@ -578,13 +579,13 @@
         printXYZData();
         function drawPerlin(depth, plotFunc) {
             let points = [];
-            for (let w = 0; w < WIDTH; w++) {
+            for (let w = 0; w < WIDTH; w ++) {
                 let x = xCenter + (w - WIDTH / 2) / WIDTH * xZoom;
                 let z = zCenter + (depth - DEPTH / 2) / DEPTH * zZoom;
                 let out = p.noise(x, yCenter, z) * outZoom * (HEIGHT / 2) + HEIGHT / 2;
                 points.splice(0, 0, { Y: Math.floor(out), X: w });
             }
-            for (let i = 0; i < points.length - 1; i++) {
+            for (let i = 0; i < points.length - 1; i ++) {
                 drawLine(points[i].Y, points[i].X, points[i + 1].Y, points[i + 1].X, plotFunc);
             }
         }
@@ -603,11 +604,11 @@
             if (isAnyKeyDown()) { doDraw = 1; }
             if (isKeyDown('m')) { dismissedHint = 1; }
             if (isKeyDown('a')) { xCenter -= 0.01 * xZoom; }
-            if (isKeyDown('d')) { xCenter += 0.01 * xZoom; }
-            if (isKeyDown('s')) { zCenter -= 0.01 * zZoom; }
-            if (isKeyDown('w')) { zCenter += 0.01 * zZoom; }
-            if (isKeyDown('q')) { yCenter -= 0.01; }
-            if (isKeyDown('e')) { yCenter += 0.01; }
+            if (isKeyDown('d')) { xCenter += 0.01 * xZoom;  }
+            if (isKeyDown('s')) { zCenter -= 0.01 * zZoom;  }
+            if (isKeyDown('w')) { zCenter += 0.01 * zZoom;  }
+            if (isKeyDown('q')) { yCenter -= 0.01;  }
+            if (isKeyDown('e')) { yCenter += 0.01;  }
             if (isKeyDown('h')) { xZoom /= 1.01; }
             if (isKeyDown('k')) { xZoom *= 1.01; }
             if (isKeyDown('u')) { zZoom /= 1.01; }
@@ -619,17 +620,17 @@
                 if (!dismissedHint) {
                     conOut.setRawText(HEIGHT - 4, WIDTH / 2 + 4, `WASDQE / UHJKYI / M / P / L`);
                 }
-
+                
                 if (doDepthDisplay) {
                     conOut.clsStyle();
                     let sp = document.createElement('span');
-                    for (let i = 0; i < DEPTH; i++) {
+                    for (let i = 0; i < DEPTH; i ++) {
                         sp.style.backgroundColor = mapToHSL(zCenter + (i - DEPTH / 2) / DEPTH * zZoom, -1, 1);
                         function stylePlotFunc(X, Y) { conOut.setStyle(Y, X, 1, sp); }
                         drawPerlin(i, stylePlotFunc);
                     }
                 }
-
+                
                 drawPerlin(DEPTH / 2, charPlotFunc);
                 printXYZData();
             }
@@ -641,10 +642,10 @@
         document.removeEventListener('keydown', pCheck);
         return 0;
     }
-
+    
     document.body.innerHTML = '<div class="consoleOut-container" id="conOut-div0"></div>';
-
-    /* V4refT5f's effort... Appreciate it! o_o
+    /* V4refT5f's effort... Appreciate it! O_o
+    document.body.innerHTML = '<div class="consoleOut-container" id="conOut-div0"></div>';
     document.addEventListener('keydown', function (event) {
         if (event.key == 'l') {
             document.getElementsByTagName('body')[0].classList.toggle('light-switch');
@@ -654,7 +655,7 @@
         }
     })
     */
-   
+
     document.addEventListener('keydown', function (event) {
         if ((event.key === 'l' || event.key === 'L')) {
             document.body.classList.toggle('light');
@@ -677,13 +678,14 @@
         }
     })();
 
+
     const WIDTH = 64;
     const HEIGHT = 64;
     const myConOut = new ConsoleOut(WIDTH, HEIGHT, 'conOut-div0');
     var testBreakOut = 0;
 
-    if (isMobileDevice()) {
-        myConOut.setRawTextMid(Math.floor(HEIGHT / 2), Math.floor(WIDTH / 2), 'No Train For YiDong');
+    if (isMobileDevice()) { 
+        myConOut.setRawTextMid(Math.floor(HEIGHT / 2), Math.floor(WIDTH / 2), 'No Train For YiDong'); 
     } else {
         async function doTests() {
             await testDisplay(myConOut);
