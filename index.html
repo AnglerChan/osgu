@@ -329,97 +329,92 @@
   /* Apply typewriter effect on every text.
    * TODO： Sound effects
    * Note: the little block is controlled by the marked CSS above.
+   * I tried to optimize but ended up fucking failing sorry bto
    */
-  async function typeWriter() {
-    function typeCharcter() {
+   async function typeWriter() {
+    if (!deleting && i < currentSentence.length) {
       text.textContent += currentSentence.charAt(i);
       i++;
       setTimeout(typeWriter, 50);
-    }
-    function deleteCharacter() {
+    } else if (deleting && i > 0) {
       text.textContent = text.textContent.slice(0, -1);
       i--;
       setTimeout(typeWriter, 50);
-    }
-
-    if (!deleting && i < currentSentence.length) {
-      typeCharcter();
-    } else if (deleting && i > 0) {
-      deleteCharacter();
     } else if (deleting && i === 0) {
       deleting = false;
       nextSentence();
       setTimeout(typeWriter, 50);
     } else if (i === currentSentence.length) {
-      if (hiddenKey && currentSentence === "brighter..." && !bulbFall) bulb.style.visibility = 'visible';
+      if (hiddenKey && currentSentence  === "brighter..." && !bulbFall) bulb.style.visibility = 'visible';
       if (bulbBroken && !sentencePushed) {
         sentences.push(toggleLightSentence);
         sentencePushed = true;
       }
-      handleButtons();
+      for (let k = 0; k < buttons.length; k++) {
+        await new Promise((resolve) => {
+          let button = buttons[k];
+          let buttonText = buttonTexts[k];
+          let j = 0;
+          let buttonDeleting = false;
+          let isButtonTyped = false;
+          let isTyping = true;
+          let loadingInterval;
 
-      async function handleButtons() {
-        for (let k = 0; k < buttons.length; k++) {
-          await new Promise((resolve) => {
-            let button = buttons[k];
-            let buttonText = buttonTexts[k];
-            let j = 0;
-            let buttonDeleting = false;
-
-            function buttonTypeWriter() {
-              hiddenKey = true;
-              if (!buttonDeleting && j < buttonText.length) {
-                button.textContent += buttonText.charAt(j);
-                j++;
-                setTimeout(buttonTypeWriter, 100);
-              } else if (buttonDeleting && j > 0) {
-                button.textContent = button.textContent.slice(0, -1);
-                j--;
-                setTimeout(buttonTypeWriter, 100);
-              } else if (buttonDeleting && j === 0) {
-                window.location.href = button.dataset.target;
-              } else {
-                isButtonTyped = true;
-                isTyping = false;
-                resolve();
-              }
+          function buttonTypeWriter() {
+            hiddenKey = true;
+            if (!buttonDeleting && j < buttonText.length) {
+              button.textContent += buttonText.charAt(j);
+              j++;
+              setTimeout(buttonTypeWriter, 100);
+            } else if (buttonDeleting && j > 0) {
+              button.textContent = button.textContent.slice(0, -1);
+              j--;
+              setTimeout(buttonTypeWriter, 100);
+            } else if (buttonDeleting && j === 0) {
+              window.location.href = button.dataset.target;
+            } else {
+              isButtonTyped = true;
+              isTyping = false;
+              resolve();
             }
+          }
 
-            if (n < 1 && isLooped == false) buttonTypeWriter();
-            button.addEventListener("click", () => {
-              if (!buttonDeleting) {
-                buttonDeleting = true;
-                isTyping = true;
-                buttonTypeWriter();
-              }
-            });
+          if (n < 1 && isLooped == false) buttonTypeWriter();
 
-            button.addEventListener("mouseover", () => {
-              if (!isTyping && isButtonTyped && !button.contains(loadingSpan)) {
-                loadingSpan.textContent = "|";
-                loadingSpan.style.marginLeft = "10px";
-                loadingSpan.style.fontSize = "12px";
-                loadingSpan.style.fontWeight = "bold";
-                button.appendChild(loadingSpan);
-                loadingInterval = setInterval(() => {
-                  loadingSpan.textContent = loadingChars[charIndex];
-                  charIndex = (charIndex + 1) % loadingChars.length;
-                }, 200);
-              }
-            });
-
-            button.addEventListener("mouseout", () => {
-              clearInterval(loadingInterval);
-              if (button.contains(loadingSpan)) {
-                button.removeChild(loadingSpan);
-              }
-            });
+          button.addEventListener("click", () => {
+            if (!buttonDeleting) {
+              buttonDeleting = true;
+              isTyping = true;
+              buttonTypeWriter();
+            }
           });
-        }
-      }
 
+          button.addEventListener("mouseover", () => {
+            if (!isTyping && isButtonTyped && !button.contains(loadingSpan)) {
+              loadingSpan.textContent = "|";
+              loadingSpan.style.marginLeft = "10px";
+              loadingSpan.style.fontSize = "12px";
+              loadingSpan.style.fontWeight = "bold";
+              button.appendChild(loadingSpan);
+
+              loadingInterval = setInterval(() => {
+                loadingSpan.textContent = loadingChars[charIndex];
+                charIndex = (charIndex + 1) % loadingChars.length;
+              }, 200);
+            }
+          });
+
+          button.addEventListener("mouseout", () => {
+            clearInterval(loadingInterval);
+            if (button.contains(loadingSpan)) {
+              button.removeChild(loadingSpan);
+            }
+          });
+        });
+      }
     }
   }
+
   typeWriter();
 
   function nextSentence() {
