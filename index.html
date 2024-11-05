@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
   <title>O.S.G.U.</title>
@@ -56,6 +56,7 @@
     font-size: large;
     border-right: 10px solid;
     line-height: 0.6;
+    /* HERE */
     width: 100%;
     height: 10%;
     display: inline-block;
@@ -321,9 +322,14 @@
   let currentSentence = sentences[n];
   let hiddenKey = false;
   let sentencePushed = false;
-  let lightMode = 'dark-mode';
+  window.lightMode = 'dark-mode';
   const loadingChars = ["|", "/", "-", "\\", "|"];
   const loadingSpan = document.createElement("span");
+
+  /* Apply typewriter effect on every text.
+   * TODO： Sound effects
+   * Note: the little block is controlled by the marked CSS above.
+   */
 
   async function typeWriter() {
     function typeCharcter() {
@@ -476,8 +482,7 @@
 
     hourHand.style.transform = `rotate(${hourDeg}deg)`;
     minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
-    secondHand.style.transform = `rotate(${secondDeg
-      }deg)`;
+    secondHand.style.transform = `rotate(${secondDeg}deg)`;
     hourNumber.textContent = hours.toString().padStart(2, '0');
     minuteNumber.textContent = minutes.toString().padStart(2, '0');
     secondNumber.textContent = seconds.toString().padStart(2, '0');
@@ -495,6 +500,10 @@
       toggleImages();
   });
 
+  /* Play 3 images of the girl dropping a bulb.
+   * TODO： bulb SE
+   * The girl is literally ???
+   */
   const images = document.querySelectorAll('.girl');
   let currentImage = 0;
   let bulbFall = false;
@@ -528,21 +537,23 @@
     bulb.parentNode.removeChild(bulb);
   }
 
+  // window.lightMode is a global variable.
   document.addEventListener('keydown', function (event) {
     if ((event.key === 'l' || event.key === 'L') && bulbBroken) {
       body.classList.toggle('light');
 
       if (body.classList.contains('light')) {
-        lightMode = 'light-mode';
+        window.lightMode = 'light-mode';
       } else {
-        lightMode = 'dark-mode';
+        window.lightMode = 'dark-mode';
       }
-      localStorage.setItem('lightMode', lightMode);
+      localStorage.setItem('window.lightMode', window.lightMode);
     }
   });
 
+  // detects if light is on and keep it.
   (function () {
-    if (localStorage.getItem("lightMode") == "light-mode") {
+    if (localStorage.getItem("window.lightMode") == "light-mode") {
       body.classList.add('light');
     }
   })();
