@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
   <title>O.S.G.U.</title>
@@ -33,6 +33,19 @@
     --bulb-color: white;
   }
 
+  body.light {
+    background-color: #ffffff;
+    color: #000000;
+    --date-color: black;
+    --date-font-color: white;
+    --clock-dark-color: rgb(56, 56, 56);
+    --clock-darker-color: gray;
+    --clock-hand-color: white;
+    --selection-color: white;
+    --selection-background-color: black;
+    --bulb-color: black;
+  }
+
   .text-container {
     font-size: large;
     white-space: nowrap;
@@ -43,6 +56,7 @@
     font-size: large;
     border-right: 10px solid;
     line-height: 0.6;
+    /* ^HERE^ */
     width: 100%;
     height: 10%;
     display: inline-block;
@@ -195,19 +209,6 @@
     background: var(--selection-background-color);
   }
 
-  body.light-switch {
-    background-color: #ffffff;
-    color: #000000;
-    --date-color: black;
-    --date-font-color: white;
-    --clock-dark-color: rgb(56, 56, 56);
-    --clock-darker-color: gray;
-    --clock-hand-color: white;
-    --selection-color: white;
-    --selection-background-color: black;
-    --bulb-color: black;
-  }
-
   .bulb {
     width: 20px;
     position: absolute;
@@ -215,14 +216,6 @@
     left: 330px;
     z-index: 1;
     animation: fall 1s ease-in paused;
-  }
-
-  .new-bulb {
-    width: 20px;
-    position: absolute;
-    top: 80px;
-    right: 330px;
-    z-index: 1;
   }
 
   @keyframes fall {
@@ -329,10 +322,16 @@
   let currentSentence = sentences[n];
   let hiddenKey = false;
   let sentencePushed = false;
+  window.lightMode = 'dark-mode';
   const loadingChars = ["|", "/", "-", "\\", "|"];
   const loadingSpan = document.createElement("span");
 
-  async function typeWriter() {
+  /* Apply typewriter effect on every text.
+   * TODO： Sound effects
+   * Note: the little block is controlled by the marked CSS above.
+   * I tried to optimize but ended up fucking failing sorry bto
+   */
+   async function typeWriter() {
     if (!deleting && i < currentSentence.length) {
       text.textContent += currentSentence.charAt(i);
       i++;
@@ -432,7 +431,6 @@
     };
   }
 
-
   text.addEventListener("click", () => {
     if (!deleting) {
       deleting = true;
@@ -449,7 +447,6 @@
       .toLocaleDateString("en-US", { weekday: "short" })
       .toLowerCase();
     dayOfWeek += ".";
-
     let dayOfMonth = now.getDate();
     if (dayOfMonth < 10) {
       dayOfMonth = "0" + dayOfMonth;
@@ -467,29 +464,22 @@
     const hours = now.getHours() % 12;
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
-
     const hourHand = document.querySelector("#hourClock .hour-hand");
     const minuteHand = document.querySelector("#minuteClock .minute-hand");
     const secondHand = document.querySelector("#secondClock .second-hand");
     const hourNumber = document.querySelector(".hour-number");
     const minuteNumber = document.querySelector(".minute-number");
     const secondNumber = document.querySelector(".second-number");
-
-
-
     const hourDeg = (hours * 30) + (minutes / 2);
     const minuteDeg = minutes * 6;
     const secondDeg = seconds * 6;
 
     hourHand.style.transform = `rotate(${hourDeg}deg)`;
     minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
-    secondHand.style.transform = `rotate(${secondDeg
-      }deg)`;
-
+    secondHand.style.transform = `rotate(${secondDeg}deg)`;
     hourNumber.textContent = hours.toString().padStart(2, '0');
     minuteNumber.textContent = minutes.toString().padStart(2, '0');
     secondNumber.textContent = seconds.toString().padStart(2, '0');
-
   }
 
   setInterval(setClocks, 1000);
@@ -499,64 +489,74 @@
   bulb.style.visibility = 'hidden';
 
   bulb.addEventListener('click', () => {
-    body.classList.toggle('light-switch');
+    body.classList.toggle('light');
     if (!bulbFall)
       toggleImages();
   });
 
+  /* Play 3 images of the girl dropping a bulb.
+   * TODO： bulb SE
+   * The girl is literally ???
+   */
   const images = document.querySelectorAll('.girl');
   let currentImage = 0;
   let bulbFall = false;
   let bulbBroken = false;
 
-
   function toggleImages() {
     images[currentImage].classList.add('active');
-
     setTimeout(function () {
       images[currentImage].classList.remove('active');
-
       currentImage = Math.min(currentImage + 1, images.length - 1);
-
       images[currentImage].classList.add('active');
-
       if (currentImage == images.length - 1) bulbFall = true;
-
       if (bulbFall) {
         bulb.style.animationPlayState = 'running';
         setTimeout(function () {
           const girlContainer = document.querySelector('.girl-container');
           girlContainer.remove();
           bulb.style.visibility = 'hidden';
-          body.classList.toggle('light-switch');
+          body.classList.toggle('light');
           localStorage.setItem('bulbBroken', 'true');
         }, 1000);
       }
-
       if (currentImage < images.length - 1) {
         setTimeout(toggleImages, 100);
       }
     }, 100);
-
-
   }
+
   if (localStorage.getItem('bulbBroken') == 'true') {
     bulbBroken = true;
     bulb.parentNode.removeChild(bulb);
   }
 
+  // window.lightMode is a global variable.
   document.addEventListener('keydown', function (event) {
-    if (event.key === 'l' && bulbBroken) {
-      body.classList.toggle('light-switch');
+    if ((event.key === 'l' || event.key === 'L') && bulbBroken) {
+      body.classList.toggle('light');
+
+      if (body.classList.contains('light')) {
+        window.lightMode = 'light-mode';
+      } else {
+        window.lightMode = 'dark-mode';
+      }
+      localStorage.setItem('window.lightMode', window.lightMode);
     }
   });
+
+  // detects if light is on and keep it.
+  (function () {
+    if (localStorage.getItem("window.lightMode") == "light-mode") {
+      body.classList.add('light');
+    }
+  })();
 
   window.addEventListener('pageshow', function (event) {
     if (event.persisted) {
       window.location.reload();
     }
   });
-
 </script>
 
 </html>

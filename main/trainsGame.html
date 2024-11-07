@@ -21,7 +21,7 @@
         background: var(--text-color);
     }
 
-    body.light-switch {
+    body.light {
         --background-color: #ffffff;
         --text-color: #000000;
     }
@@ -642,7 +642,9 @@
         document.removeEventListener('keydown', pCheck);
         return 0;
     }
-
+    
+    document.body.innerHTML = '<div class="consoleOut-container" id="conOut-div0"></div>';
+    /* V4refT5f's effort... Appreciate it! O_o
     document.body.innerHTML = '<div class="consoleOut-container" id="conOut-div0"></div>';
     document.addEventListener('keydown', function (event) {
         if (event.key == 'l') {
@@ -652,6 +654,30 @@
             testBreakOut = 1;
         }
     })
+    */
+
+    document.addEventListener('keydown', function (event) {
+        if ((event.key === 'l' || event.key === 'L')) {
+            document.body.classList.toggle('light');
+            if (document.body.classList.contains('light')) {
+                window.lightMode = 'light-mode';
+            }
+            else {
+                window.lightMode = 'dark-mode';
+            }
+            localStorage.setItem('window.lightMode', window.lightMode);
+        }
+        if (event.key == ' ' && event.shiftKey) {
+            testBreakOut = 1;
+        }
+    });
+
+    (function () {
+        if (localStorage.getItem("window.lightMode") == "light-mode") {
+            document.body.classList.add('light');
+        }
+    })();
+
 
     const WIDTH = 64;
     const HEIGHT = 64;

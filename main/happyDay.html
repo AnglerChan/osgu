@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <title>Chatroom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+    body {
+        background-color: var(--background-color);
+        color: var(--color);
+    }
+
+    body.light {
+        --background-color: white;
+        --color: black;
+    }
+
+    :root {
+        --background-color: black;
+        --color: white;
+    }
+</style>
+
+<body>
+
+</body>
+
+<script>
+
+    /* toggle dark mode */
+    document.addEventListener('keydown', function (event) {
+        if ((event.key === 'l' || event.key === 'L')) {
+            document.body.classList.toggle('light');
+            if (document.body.classList.contains('light')) {
+                window.lightMode = 'light-mode';
+            } else {
+                window.lightMode = 'dark-mode';
+            }
+            localStorage.setItem('window.lightMode', window.lightMode);
+        }
+    });
+
+    (function () {
+        if (localStorage.getItem("window.lightMode") == "light-mode") {
+            document.body.classList.add('light');
+        }
+    })();
+</script>
